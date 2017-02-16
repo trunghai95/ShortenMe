@@ -113,3 +113,22 @@ exports.getUrlCode = function(longUrl, callback) {
         callback(err);
     });
 }
+
+/**
+ * Get all urls from database
+ */
+exports.getAllUrls = function(callback) {
+    var list = [];
+    Urls.findAll().then(function(rows) {
+        rows.forEach(function(row) {
+            list.append({
+                urlCode: row.urlCode,
+                longUrl: row.longUrl
+            });
+        });
+
+        callback(null, list);
+    }).error(function(err) {
+        callback(err);
+    })
+}
