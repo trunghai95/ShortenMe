@@ -1,8 +1,26 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    text-align: center
 }
 
 a {
-  color: #00B7FF;
+    color: #00B7FF;
+}
+
+input[type=text] {
+    font-size: 18px;
+    padding: 10px;
+    box-sizing: border-box;
+    width: 75%;
+}
+
+input[type=submit] {
+    margin: 10px;
+    box-sizing: border-box;
+    font-size: 18px;
+}
+
+.error-message {
+    color: red;
 }

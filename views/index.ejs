@@ -1,11 +1,41 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+    <head>
+        <title><%= title %></title>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+    </head>
+    <body>
+        <h1><%= title %></h1>
+        <input type="text" placeholder="Paste a link to shorten it!" id="urlText"><br/>
+        <input type="submit" value="Shorten" id="submitButton">
+        <div class="error-message" id="error"></div>
+
+        <!-- Javascript -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io.connect('/');
+
+            $(document).ready(function() {
+                // Perform a click on submit button when user hit Enter on url text
+                $('#urlText').keypress(function(e) {
+                    if (e.keyCode == 13) {
+                        $('#submitButton').click();
+                    }
+                });
+
+                // Request for shortened url from back-end
+                $('#submitButton').click(function() {
+                    $('#error').text('');
+                    socket.emit('shorten', $('#urlText').val(), function(err, shortUrl) {
+                        if (err) {
+                            $('#error').text(err);
+                        } else {
+                            $('#urlText').val('shortUrl');
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
 </html>

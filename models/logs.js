@@ -72,7 +72,7 @@ function getDailyHits(urlCode, callback) {
         where: {
             urlCode: urlCode,
             createdAt: {
-                $gt: new Date(new Date() - dayCount * DAY_LENGTH);
+                $gt: new Date(new Date() - dayCount * DAY_LENGTH)
             }
         }
     }).then(function(count) {
@@ -92,7 +92,7 @@ function getWeeklyHits(urlCode, callback) {
         where: {
             urlCode: urlCode,
             createdAt: {
-                $gt: new Date(new Date() - weekCount * 7 * DAY_LENGTH);
+                $gt: new Date(new Date() - weekCount * 7 * DAY_LENGTH)
             }
         }
     }).then(function(count) {
