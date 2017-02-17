@@ -14,6 +14,10 @@ exports.configure = function(inputModel) {
  * Create a new log entry
  */
 exports.create = function(urlCode, ipAddress, userAgent, referral, callback) {
+    if (!referral) {
+        referral = 'Others';
+    }
+
     Logs.create({
         urlCode: urlCode,
         ipAddress: ipAddress,
@@ -47,15 +51,11 @@ function getReferralSources(urlCode, callback) {
         where: { urlCode: urlCode },
         group: ['referral'],
         attributes: ['referral', [Sequelize.fn('count', Sequelize.col('referral')), 'hits']],
-        order: [ ['hits', 'DESC'] ],
+        order: [ [Sequelize.col('hits'), 'DESC'] ],
         raw: true
     }).then(function(rows) {
         var list = [];
         rows.forEach(function(row) {
-            var ref = row.referral;
-            if (!ref) {
-                ref = 'Others'
-            }
             list.push({
                 referral: row.referral,
                 hits: row.hits
@@ -114,51 +114,36 @@ function getWeeklyHits(urlCode, callback) {
  * - dailyHits: Daily hits for the last 30 days
  * - weeklyHits: Weekly hits for the last 4 weeks
  */
-exports.analytics = function(urlCode, callback) {
+exports.getAnalytics = function(urlCode, callback) {
     var result = {}
 
     getTotalHits(urlCode, function(err, count) {
         if (err) {
-            result.error = err;
-        } else {
-            result.totalHits = count;
+            return callback(err);
         }
-    });
+        result.totalHits = count;
 
-    getReferralSources(urlCode, function(err, list) {
-        if (err) {
-            result.error = err;
-        } else {
-            result.referralSources = list;
-        }
-    });
-
-    getDailyHits(urlCode, function(err, count) {
-        if (err) {
-            result.error = err;
-        } else {
-            result.dailyHits = count;
-        }
-    });
-
-    getWeeklyHits(urlCode, function(err, count) {
-        if (err) {
-            result.error = err;
-        } else {
-            result.weeklyHits = count;
-        }
-    });
-
-    // Continuously check if the result is ready
-    process.tick(function() {
-        while (result.totalHits == undefined && result.referralSources == undefined
-                && result.dailyHits == undefined && result.weeklyHits == undefined) {
-            // Stop if there is an error
-            if (result.error) {
-                return callback(result.error);
+        getReferralSources(urlCode, function(err, list) {
+            if (err) {
+                return callback(err);
             }
-        }
+            result.referralSources = list;
 
-        callback(null, result);
+            getDailyHits(urlCode, function(err, count) {
+                if (err) {
+                    return callback(err);
+                }
+                result.dailyHits = count;
+
+                getWeeklyHits(urlCode, function(err, count) {
+                    if (err) {
+                        return callback(err);
+                    }
+                    result.weeklyHits = count;
+
+                    callback(null, result);
+                });
+            });
+        });
     });
 }

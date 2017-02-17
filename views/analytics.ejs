@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= title %></title>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+    </head>
+    <body class="shorten-analytics">
+        <h2>Analytics for <a href="/<%= urlCode %>"><%= shortUrl %></a></h2>
+        <ul>
+            <li>Total hits: <%= analytics.totalHits %></li>
+            <li>Daily hits (last 30 days): <%= analytics.dailyHits.toFixed(2) %></li>
+            <li>Weekly hits (last 4 weeks): <%= analytics.weeklyHits.toFixed(2) %></li>
+            <% if (analytics.referralSources.length > 0) { %>
+                <li>
+                    Referral sources:
+                    <ul>
+                        <% analytics.referralSources.forEach(function(item) { %>
+                            <li><%= item.referral %>: <%= item.hits %></li>
+                        <% }); %>
+                    </ul>
+                </li>
+            <% } %>
+        </ul>
+    </body>
+</html>

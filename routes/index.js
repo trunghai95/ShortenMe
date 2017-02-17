@@ -54,4 +54,31 @@ router.get('/:urlCode', function(req, res, next) {
     });
 });
 
+/**
+ * Get analytics for a shortened url
+ */
+router.get('/analytics/:urlCode', function(req, res, next) {
+    var urlCode = req.params.urlCode;
+
+    // Check if urlCode exists
+    models.Urls.getLongUrl(urlCode, function(err, longUrl) {
+        if (err || !longUrl) {
+            return next();
+        }
+
+        models.Logs.getAnalytics(urlCode, function(err, analytics) {
+            if (err) {
+                return next();
+            }
+
+            res.render('analytics', {
+                title: 'Analytics | ShortenMe',
+                urlCode: urlCode,
+                shortUrl: require('url').resolve(config.WEBHOST, urlCode),
+                analytics: analytics
+            });
+        });
+    });
+});
+
 module.exports.routes = router;
