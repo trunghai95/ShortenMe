@@ -23,7 +23,7 @@ input#longUrl {
 }
 
 input#shortUrl {
-    width: 250px;
+    width: 320px;
 }
 
 input[type=submit] {
