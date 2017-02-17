@@ -6,9 +6,10 @@
     </head>
     <body>
         <h1><%= title %></h1>
-        <input type="text" placeholder="Paste a link to shorten it!" id="urlText"><br/>
-        <input type="submit" value="Shorten" id="submitButton">
-        <div class="error-message" id="error"></div>
+        <input type="text" placeholder="Paste a link to shorten it!" id="longUrl"><br/>
+        <input type="submit" value="Shorten" id="submitButton"><br/>
+        <input type="text" id="shortUrl" style="display:none;" onclick="this.focus(); this.select();" readonly>
+        <div class="error-message" id="error" style="display:none;"></div>
 
         <!-- Javascript -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -18,7 +19,7 @@
 
             $(document).ready(function() {
                 // Perform a click on submit button when user hit Enter on url text
-                $('#urlText').keypress(function(e) {
+                $('#longUrl').keypress(function(e) {
                     if (e.keyCode == 13) {
                         $('#submitButton').click();
                     }
@@ -27,11 +28,15 @@
                 // Request for shortened url from back-end
                 $('#submitButton').click(function() {
                     $('#error').text('');
-                    socket.emit('shorten', $('#urlText').val(), function(err, shortUrl) {
+                    socket.emit('shorten', $('#longUrl').val(), function(err, shortUrl) {
                         if (err) {
-                            $('#error').text(err);
+                            // Show error, hide short url
+                            $('#error').text(err).fadeIn('fast');
+                            $('#shortUrl').val('').slideUp('fast');
                         } else {
-                            $('#urlText').val('shortUrl');
+                            // Show short url, hide error
+                            $('#error').text('').fadeOut('fast');
+                            $('#shortUrl').val(shortUrl).slideDown('fast');
                         }
                     });
                 });

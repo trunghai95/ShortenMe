@@ -7,6 +7,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var utils = require('./utils');
+var config = require('./config');
 
 var index = require('./routes/index');
 
@@ -16,6 +17,8 @@ models.connect(function(err) {
                 throw err;
         }
 });
+
+index.configure(models);
 
 var app = express();
 
@@ -41,7 +44,7 @@ app.use(function(req, res, next) {
         next();
 });
 
-app.use('/', index);
+app.use('/', index.routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -119,7 +122,21 @@ function onListening() {
 
 io.sockets.on('connection', function(socket) {
     socket.on('shorten', function(longUrl, callback) {
-        // TODO: complete this
-        callback('Please enter a valid link!');
+        // Add http to the beginning of url
+        longUrl = utils.addHttp(longUrl);
+
+        // Check the validation
+        if (!utils.checkUrl(longUrl)) {
+            callback('Please enter a valid link!');
+        } else {
+            models.Urls.getUrlCode(longUrl, function(err, urlCode) {
+                if (err) {
+                    callback(err);
+                } else {
+                    var shortUrl = require('url').resolve(config.WEBHOST, urlCode);
+                    callback(null, shortUrl);
+                }
+            });
+        }
     });
 });

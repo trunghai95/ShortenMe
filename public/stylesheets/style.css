@@ -12,7 +12,15 @@ input[type=text] {
     font-size: 18px;
     padding: 10px;
     box-sizing: border-box;
+    margin: 10px;
+}
+
+input#longUrl {
     width: 75%;
+}
+
+input#shortUrl {
+    width: 300px;
 }
 
 input[type=submit] {

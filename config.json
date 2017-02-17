@@ -1,5 +1,6 @@
 {
     "DB_URI": "sqlite://db.sqlite3",
-    "CODE_LENGTH": 8,
-    "CHARSET": "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+    "CODE_LENGTH": 7,
+    "CHARSET": "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz",
+    "WEBHOST": "localhost:3000/"
 }

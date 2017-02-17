@@ -107,7 +107,14 @@ exports.getUrlCode = function(longUrl, callback) {
         if (url) {
             callback(null, url.urlCode);
         } else {
-            callback(null, null);
+            // If the url does not exist, add it to db
+            exports.create(longUrl, function(err, url) {
+                if (err) {
+                    callback(err);
+                } else {
+                    callback(null, url.urlCode);
+                }
+            })
         }
     }).error(function(err) {
         callback(err);
