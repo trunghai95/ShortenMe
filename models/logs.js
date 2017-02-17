@@ -47,11 +47,16 @@ function getReferralSources(urlCode, callback) {
         where: { urlCode: urlCode },
         group: ['referral'],
         attributes: ['referral', [Sequelize.fn('count', Sequelize.col('referral')), 'hits']],
+        order: [ ['hits', 'DESC'] ],
         raw: true
     }).then(function(rows) {
         var list = [];
         rows.forEach(function(row) {
-            list.append({
+            var ref = row.referral;
+            if (!ref) {
+                ref = 'Others'
+            }
+            list.push({
                 referral: row.referral,
                 hits: row.hits
             });

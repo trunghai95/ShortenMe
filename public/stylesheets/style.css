@@ -1,11 +1,14 @@
 body {
     padding: 50px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-    text-align: center
+}
+
+body.shorten-index {
+    text-align: center;
 }
 
 a {
-    color: #00B7FF;
+    color: #0645AD;
 }
 
 input[type=text] {
@@ -20,7 +23,7 @@ input#longUrl {
 }
 
 input#shortUrl {
-    width: 300px;
+    width: 250px;
 }
 
 input[type=submit] {
@@ -31,4 +34,34 @@ input[type=submit] {
 
 .error-message {
     color: red;
+}
+
+table {
+    margin-top: 20px;
+    width: 100%;
+}
+
+th {
+    text-align: center;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+td {
+    text-align: left;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+tr.content-row:hover {
+    background: gold;
+}
+
+tr.header-row {
+    background: black;
+    color: white;
 }

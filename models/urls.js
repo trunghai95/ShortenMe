@@ -128,7 +128,7 @@ exports.getAllUrls = function(callback) {
     var list = [];
     Urls.findAll().then(function(rows) {
         rows.forEach(function(row) {
-            list.append({
+            list.push({
                 urlCode: row.urlCode,
                 longUrl: row.longUrl
             });
@@ -137,5 +137,5 @@ exports.getAllUrls = function(callback) {
         callback(null, list);
     }).error(function(err) {
         callback(err);
-    })
+    });
 }

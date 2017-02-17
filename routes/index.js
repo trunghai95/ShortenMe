@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var models = undefined;
+var config = require('../config');
+var utils = require('../utils');
 
 /**
  * Get the database models
@@ -11,7 +13,22 @@ exports.configure = function(inputModel) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'ShortenMe!' });
+    models.getAllUrls(function(err, rows) {
+        if (err) {
+            return next();
+        }
+
+        rows.forEach(function(row) {
+            row.shortUrl = require('url').resolve(config.WEBHOST, row.urlCode);
+            row.longUrl = utils.trim(row.longUrl);
+            row.createdAt = utils.formatDate(row.createdAt);
+        });
+
+        res.render('index', {
+            title: 'ShortenMe!',
+            urls: rows
+        });
+    });
 });
 
 /**
@@ -24,7 +41,13 @@ router.get('/:urlCode', function(req, res, next) {
             // Cannot find the long url
             return next();
         }
-        console.log(longUrl);
+
+        // Log the hit
+        models.Logs.create(urlCode, req.real_ip, req.get('user-agent'), req.get('referrer'), function(err) {
+            if (err) {
+                console.error('Error: ' + err);
+            }
+        });
 
         // Redirect to the long url
         res.redirect(longUrl);

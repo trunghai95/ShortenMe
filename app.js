@@ -129,6 +129,7 @@ io.sockets.on('connection', function(socket) {
         if (!utils.checkUrl(longUrl)) {
             callback('Please enter a valid link!');
         } else {
+            console.log('check true')
             models.Urls.getUrlCode(longUrl, function(err, urlCode) {
                 if (err) {
                     callback(err);

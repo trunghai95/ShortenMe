@@ -4,12 +4,34 @@
         <title><%= title %></title>
         <link rel='stylesheet' href='/stylesheets/style.css' />
     </head>
-    <body>
+    <body class="shorten-index">
         <h1><%= title %></h1>
         <input type="text" placeholder="Paste a link to shorten it!" id="longUrl"><br/>
         <input type="submit" value="Shorten" id="submitButton"><br/>
         <input type="text" id="shortUrl" style="display:none;" onclick="this.focus(); this.select();" readonly>
         <div class="error-message" id="error" style="display:none;"></div>
+
+        <!-- Analytics -->
+        <% if (urls.length > 0) { %>
+        <hr/>
+        <h2>Analytics</h2>
+        <table border="1">
+            <tr class="header-row">
+                <th>Short link</th>
+                <th>Original link</th>
+                <th>Created</th>
+                <th>Total hits</th>
+            </tr>
+            <% urls.forEach(function(url) { %>
+            <tr class="content-row">
+                <td><a href="/<%= url.urlCode %>"><%= url.shortUrl %></a></td>
+                <td><a href="<%= url.longUrl %>"><%= url.longUrl %></a></td>
+                <td><%= url.createdAt %></td>
+                <td style="text-align: center;"><a href="/analytics/<%= url.urlCode %>"><%= url.totalHits %></a></td>
+            </tr>
+            <% }); %>
+        </table>
+        <% } %>
 
         <!-- Javascript -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -39,6 +61,11 @@
                             $('#shortUrl').val(shortUrl).slideDown('fast');
                         }
                     });
+                });
+
+                // Clickable row
+                $(".clickable-row").click(function() {
+                    window.location = $(this).data("href");
                 });
             });
         </script>
