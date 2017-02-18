@@ -25,7 +25,7 @@
             <% urls.forEach(function(url) { %>
             <tr class="content-row">
                 <td><a href="/<%= url.urlCode %>"><%= url.shortUrl %></a></td>
-                <td><a href="<%= url.longUrl %>"><%= url.longUrl %></a></td>
+                <td><a href="<%= url.longUrl %>"><%= url.trimmedUrl %></a></td>
                 <td><%= url.createdAt %></td>
                 <td style="text-align: center;"><a href="/analytics/<%= url.urlCode %>"><%= url.totalHits %></a></td>
             </tr>

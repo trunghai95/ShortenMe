@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
 
         rows.forEach(function(row) {
             row.shortUrl = require('url').resolve(config.WEBHOST, row.urlCode);
-            row.longUrl = utils.trim(row.longUrl);
+            row.trimmedUrl = utils.trim(row.longUrl);
             row.createdAt = utils.formatDate(row.createdAt);
         });
 

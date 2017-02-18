@@ -38,3 +38,6 @@ jspm_packages
 
 # Unit test source code
 unittest.js
+
+# Database file
+db.sqlite3
